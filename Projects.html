@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Projects - Shah Construction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        /* ========================================
+        CSS Variables and Enhanced Design
+        ========================================
+        */
+        :root {
+            --primary-color: #FBBF24; /* Richer Gold */
+            --dark-color: #1F2937; /* Rich Charcoal */
+            --medium-dark-color: #374151;
+            --light-color: #F9FAFB; /* Off-White */
+            --white-color: #ffffff;
+            --text-color: #4B5563;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+            --blueprint-bg: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23374151' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background-color: var(--white-color);
+            color: var(--text-color);
+            margin: 0;
+            padding-top: 75px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+        body.modal-open { overflow: hidden; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ========================================
+        Reusable Components
+        ========================================
+        */
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+        h1, h2, h3 { font-family: 'Roboto Condensed', sans-serif; color: var(--dark-color); text-transform: uppercase; }
+        .section { padding: 6rem 0; }
+        .section-title-container { text-align: center; margin-bottom: 4rem; }
+        .section-title { font-size: 2.5rem; margin-bottom: 0.5rem; position: relative; display: inline-block; }
+        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60px; height: 4px; background-color: var(--primary-color); }
+        .section-subtitle { max-width: 650px; margin: 1.5rem auto 0; line-height: 1.6; }
+        .cta-button { background-color: var(--primary-color); color: var(--dark-color); font-family: 'Roboto Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; padding: 1rem 2.5rem; text-decoration: none; transition: all 0.3s ease; display: inline-block; border: 2px solid var(--primary-color); box-shadow: var(--shadow-md); }
+        .cta-button:hover { background-color: var(--dark-color); color: var(--primary-color); border-color: var(--dark-color); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+
+        /* Fade-in Animation on Scroll */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* ========================================
+        Header & Navigation
+        ========================================
+        */
+        .header { background-color: rgba(31, 41, 55, 0.9); backdrop-filter: blur(10px); position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: var(--shadow-md); border-bottom: 4px solid var(--primary-color); }
+        .header .container { display: flex; justify-content: space-between; align-items: center; height: 75px; }
+        .logo { text-decoration: none; display: flex; align-items: center; gap: 0.75rem; }
+        .logo img { 
+            height: 55px; 
+            width: 55px; 
+            display: block;
+            border-radius: 50%;
+            transition: transform 0.8s ease-in-out;
+        }
+        .logo:hover img {
+            transform: rotate(360deg);
+        }
+        .logo span { font-size: 1.2rem; font-weight: 700; color: var(--white-color); font-family: 'Roboto Condensed', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        .logo .text-primary { color: var(--primary-color); }
+        .main-nav { display: none; }
+        .nav-link { color: var(--light-color); text-decoration: none; font-weight: 600; padding: 5px 0; border-bottom: 2px solid transparent; transition: all 0.3s ease; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        #mobile-menu-button { background: none; border: none; cursor: pointer; padding: 0; }
+        #mobile-menu-button svg { stroke: var(--primary-color); }
+        #mobile-menu { background-color: var(--medium-dark-color); padding: 1rem 1.5rem; }
+        #mobile-menu a { display: block; padding: 0.75rem 0; color: var(--light-color); text-decoration: none; font-weight: 600; }
+        .hidden { display: none; }
+
+        /* ========================================
+        Page Header
+        ========================================
+        */
+        .page-header {
+            padding: 5rem 0;
+            background-color: var(--dark-color);
+            background-image: linear-gradient(rgba(31, 41, 55, 0.85), rgba(31, 41, 55, 0.85)), var(--blueprint-bg);
+            background-size: auto;
+            background-position: center;
+            color: var(--white-color);
+            text-align: center;
+        }
+        .page-header h1 { color: var(--white-color); font-size: 3.5rem; }
+        .page-header p { color: var(--primary-color); font-size: 1.2rem; margin-top: 0.5rem; font-family: 'Work Sans', sans-serif; text-transform: none; }
+        
+        /* ========================================
+        Projects Page Specifics
+        ========================================
+        */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        .project-card {
+            background-color: var(--white-color);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .project-image { position: relative; overflow: hidden; }
+        .project-image img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .project-card:hover .project-image img { transform: scale(1.05); }
+        .project-content { padding: 1.5rem; }
+        .project-content h3 { font-size: 1.5rem; margin-top: 0; margin-bottom: 0.5rem; }
+        .project-category {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .project-content p { line-height: 1.6; margin-bottom: 0; }
+
+        /* ========================================
+        Call to Action (CTA) Section
+        ========================================
+        */
+        #cta-section {
+            background-color: var(--dark-color);
+            color: var(--white-color);
+            text-align: center;
+        }
+        #cta-section h2 { color: var(--white-color); font-size: 2.5rem; }
+        #cta-section p { color: #ccc; margin-bottom: 2rem; font-size: 1.1rem; }
+        
+        /* ========================================
+        Modal Styles
+        ========================================
+        */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .modal-overlay:not(.hidden) { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background-color: var(--white-color);
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-overlay:not(.hidden) .modal-content { transform: scale(1); }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2.5rem;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .modal-close:hover { color: var(--dark-color); }
+        .modal-image img { width: 100%; height: auto; max-height: 400px; object-fit: cover; }
+        .modal-details h3 { font-size: 2rem; margin: 0 0 0.5rem 0; }
+        .modal-details #modal-category {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            padding: 0.25rem 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            font-family: 'Work Sans', sans-serif;
+        }
+        .modal-details #modal-details-text { line-height: 1.7; text-align: left; }
+
+        /* ========================================
+        Footer
+        ========================================
+        */
+        .footer { background-color: var(--medium-dark-color); color: var(--light-color); padding: 4rem 0 2rem 0; text-align: center; }
+        .footer .logo { margin-bottom: 1.5rem; display: inline-flex; }
+        .social-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; }
+        .social-links a { color: var(--light-color); text-decoration: none; font-size: 1.5rem; transition: all 0.3s ease; }
+        .social-links a:hover { color: var(--primary-color); transform: scale(1.2); }
+        .copyright { color: #adb5bd; font-size: 0.9rem; }
+        .designer-credit { font-size: 0.8rem; color: #777; margin-top: 1.5rem; }
+        .designer-credit a { color: #999; text-decoration: none; }
+        .designer-credit a:hover { color: var(--primary-color); }
+
+        /* ========================================
+        Responsive Media Queries
+        ========================================
+        */
+        @media (min-width: 768px) {
+            .main-nav { display: flex; gap: 2.5rem; }
+            #mobile-menu-button { display: none; }
+            .logo span { display: block; font-size: 1.5rem;}
+            .projects-grid { grid-template-columns: repeat(2, 1fr); }
+            .modal-content { flex-direction: row; }
+            .modal-image { flex: 1; }
+            .modal-details { flex: 1; text-align: left; }
+        }
+        @media (min-width: 992px) {
+            .projects-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="SC Logo.jpg" alt="Shah Construction Logo">
+                <span>SHAH <span class="text-primary">CONSTRUCTION</span></span>
+            </a>
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="projects.html" class="nav-link active">Projects</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <button id="mobile-menu-button">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden">
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="projects.html">Projects</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="container">
+                <h1>Our Projects</h1>
+                <p>A Portfolio of Quality, Craftsmanship, and Dedication</p>
+            </div>
+        </header>
+        
+        <!-- Projects Section -->
+        <section id="projects" class="section">
+            <div class="container">
+                <div class="section-title-container fade-in-section">
+                    <h2 class="section-title">Featured Work</h2>
+                    <p class="section-subtitle">We take pride in every project, big or small. Our portfolio is a testament to our commitment to quality and the trust our clients place in us. Explore some of our recently completed projects in Chhatrapati Sambhaji Nagar.</p>
+                </div>
+
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <div class="project-card fade-in-section" data-name="Modern Residential Villa" data-category="Residential" data-img="house 1.jpg" data-details="This project involved the ground-up construction of a 4,000 sq. ft. luxury villa. Key features include an open-concept living space, smart home integration, and sustainable energy solutions. We managed all aspects from architectural design collaboration to final landscaping, delivering the project two weeks ahead of schedule.">
+                        <div class="project-image">
+                            <img src="house 1.jpg" alt="Modern Residential Villa">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-category">Residential</span>
+                            <h3>Modern Residential Villa</h3>
+                            <p>A stunning custom-built villa featuring contemporary design and high-end finishes.</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="project-card fade-in-section" data-name="City Business Hub" data-category="Commercial" data-img="Business.jpeg" data-details="A state-of-the-art commercial complex offering 50,000 sq. ft. of prime retail and office space. The structure features a modern glass facade, energy-efficient systems, and ample underground parking. The project was completed on-time and on-budget, and is now a landmark for local businesses.">
+                        <div class="project-image">
+                             <img src="Business.jpeg" alt="City Business Hub">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-category">Commercial</span>
+                            <h3>City Business Hub</h3>
+                            <p>A multi-story commercial complex designed for functionality and business growth.</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="project-card fade-in-section" data-name="Heritage Home Restoration" data-category="Renovation" data-img="Heritage Home Restoration.jpeg" data-details="This renovation project required a delicate touch to restore a century-old heritage property. We carefully preserved original architectural elements while seamlessly integrating modern amenities like updated plumbing, electrical systems, and a new kitchen. The result is a home that honors its past while embracing the future.">
+                        <div class="project-image">
+                             <img src="Heritage Home Restoration.jpeg" alt="Heritage Home Restoration">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-category">Renovation</span>
+                            <h3>Heritage Home Restoration</h3>
+                            <p>Careful restoration of a historic property, preserving its timeless charm.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Project 4 -->
+                    <div class="project-card fade-in-section" data-name="Sunrise Apartments" data-category="Residential" data-img="construction5.jpg" data-details="A modern apartment complex with 80 units, focused on community living. The project includes shared amenities such as a landscaped garden, a children's play area, and a community hall. Built with sustainable practices, the building incorporates rainwater harvesting and solar panels.">
+                        <div class="project-image">
+                             <img src="construction5.jpg" alt="Sunrise Apartments">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-category">Residential</span>
+                            <h3>Sunrise Apartments</h3>
+                            <p>A modern apartment complex focused on community living and sustainable design.</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 5 -->
+                     <div class="project-card fade-in-section" data-name="Logistics Warehouse" data-category="Industrial" data-img="Warehouse.jpeg" data-details="We constructed a 100,000 sq. ft. industrial warehouse for a leading logistics company. The structure was designed for maximum durability and efficiency, featuring high ceilings, reinforced concrete flooring, and multiple loading bays to streamline supply chain operations.">
+                        <div class="project-image">
+                             <img src="Warehouse.jpeg" alt="Industrial Warehouse">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-category">Industrial</span>
+                            <h3>Logistics Warehouse</h3>
+                            <p>A large-scale industrial warehouse built for durability and logistical efficiency.</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 6 -->
+                    <div class="project-card fade-in-section" data-name="Downtown Office Remodel" data-category="Renovation" data-img="office.jpg" data-details="This project involved a complete interior and exterior renovation of a 5-story office building. We modernized the facade, redesigned the lobby, and created an open-plan, collaborative workspace on each floor. The project was completed with minimal disruption to the building's other tenants.">
+                        <div class="project-image">
+                            <img src="office.jpg" alt="Downtown Office Remodel">
+                        </div>
+                        <div class="project-content">
+                            <span class="project-category">Renovation</span>
+                            <h3>Downtown Office Remodel</h3>
+                            <p>Complete renovation of an office building to create a modern, collaborative workspace.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section id="cta-section" class="section fade-in-section">
+            <div class="container">
+                <h2>Have a Project in Mind?</h2>
+                <p>Let's turn your ideas into a concrete plan. Contact us for a free consultation.</p>
+                <a href="contact.html" class="cta-button">Get a Free Quote</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="SC Logo.jpg" alt="Shah Construction Logo">
+                <span>SHAH <span class="text-primary">CONSTRUCTION</span></span>
+            </a>
+            <p style="margin: 1rem 0;">Station Road, Chhatrapati Sambhaji Nagar, Maharashtra, 431001</p>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v2.385z"/></svg></a>
+                <a href="#" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.98v16h4.98v-8.396c0-2.002.88-3.368 2.91-3.368 1.59 0 2.52.88 2.52 3.368v8.396h4.98v-10.396c0-4.002-2.31-6.632-5.26-6.632-2.51 0-3.84 1.381-4.43 2.568v-2.136h-4.98z"/></svg></a>
+                <a href="#" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg></a>
+            </div>
+            <p class="copyright">&copy; 2025 Shah Construction. All Rights Reserved.</p>
+            <p class="designer-credit">Website designed by Kamel Shah</p>
+        </div>
+    </footer>
+    
+    <!-- Project Details Modal -->
+    <div id="project-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="modal-close-button" class="modal-close">&times;</button>
+            <div class="modal-image">
+                <img id="modal-img" src="" alt="Project Image">
+            </div>
+            <div class="modal-details">
+                <span id="modal-category"></span>
+                <h3 id="modal-name"></h3>
+                <p id="modal-details-text"></p>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        const navLinks = document.querySelectorAll('#mobile-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // --- Active Nav Link on Page Load ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.main-nav a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+
+            // --- Scroll Animation Logic ---
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // --- Modal Logic ---
+            const projectCards = document.querySelectorAll('.project-card');
+            const modal = document.getElementById('project-modal');
+            const modalCloseButton = document.getElementById('modal-close-button');
+
+            if (modal) {
+                projectCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        const name = card.dataset.name;
+                        const category = card.dataset.category;
+                        const imgSrc = card.dataset.img;
+                        const details = card.dataset.details;
+
+                        document.getElementById('modal-name').textContent = name;
+                        document.getElementById('modal-category').textContent = category;
+                        document.getElementById('modal-img').src = imgSrc;
+                        document.getElementById('modal-img').alt = `Image of ${name}`;
+                        document.getElementById('modal-details-text').textContent = details;
+
+                        document.body.classList.add('modal-open');
+                        modal.classList.remove('hidden');
+                    });
+                });
+
+                const closeModal = () => {
+                    document.body.classList.remove('modal-open');
+                    modal.classList.add('hidden');
+                };
+
+                modalCloseButton.addEventListener('click', closeModal);
+
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
